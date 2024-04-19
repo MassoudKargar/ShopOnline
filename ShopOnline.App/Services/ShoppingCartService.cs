@@ -12,6 +12,12 @@ public class ShoppingCartService(HttpClient httpClient) : IShoppingCartService
 {
     public event Action<int>? OnShoppingCartChanged;
 
+    public void RaiseEventOnShoppingCartChanged(int totalQty)
+    {
+        if (OnShoppingCartChanged == null) return;
+        OnShoppingCartChanged.Invoke(totalQty);
+    }
+
     public async Task<CartItemDto?> AddItem(CartItemToAddDto cartItemToAddDto)
     {
         try
@@ -87,12 +93,6 @@ public class ShoppingCartService(HttpClient httpClient) : IShoppingCartService
 
             throw;
         }
-    }
-
-    public void RaiseEventOnShoppingCartChanged(int totalQty)
-    {
-        if (OnShoppingCartChanged == null) return;
-        OnShoppingCartChanged.Invoke(totalQty);
     }
 
     public async Task<CartItemDto?> UpdateQty(CartItemQtyUpdateDto cartItemQtyUpdateDto)

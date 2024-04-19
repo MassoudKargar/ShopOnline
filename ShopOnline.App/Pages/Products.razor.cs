@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+
 using Microsoft.AspNetCore.Components;
+
 using ShopOnline.App.Services.Contracts;
 using ShopOnline.Models.Dtos;
 
@@ -10,11 +12,25 @@ public partial class Products : ComponentBase
     [Inject]
     public IProductService ProductService { get; set; }
 
+    [Inject]
+    public IShoppingCartService ShoppingCartService { get; set; }
+
     public IEnumerable<ProductDto>? ProductDtos { get; set; }
+    public string? ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ProductDtos = await ProductService.GetItems();
+        try
+        {
+            ProductDtos = await ProductService.GetItems();
+            var shoppingCartItems = await ShoppingCartService.GetItems(HardCoded.UserId);
+            var totalQty = shoppingCartItems.Sum(i => i.Qty);
+            ShoppingCartService.RaiseEventOnShoppingCartChanged(totalQty);
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
     }
 
     protected IOrderedEnumerable<IGrouping<int, ProductDto>>? GetGroupedProductsByCategory()
