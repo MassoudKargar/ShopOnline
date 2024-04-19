@@ -1,0 +1,26 @@
+﻿@page "/"
+
+@if (ProductDtos == null)
+{
+    <h3>Loading products...</h3>
+}
+else
+{
+    <h3 class="mb-5">Products</h3>
+    var productCount = ProductDtos.Count();
+    if (productCount > 0)
+    {
+
+        <div class="row mt-3">
+            @foreach (var prodGroup in GetGroupedProductsByCategory())
+            {
+                <h4>@GetCategoryName(prodGroup)</h4>
+
+                <div class="row mt-3">
+                    <DisplayProducts ProductDtos="@(prodGroup.Take(4))" />  
+                </div>
+                <hr class="mb-3" />
+            }
+        </div>
+    }
+}
