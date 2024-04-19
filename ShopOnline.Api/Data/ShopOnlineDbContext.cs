@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using ShopOnline.Api.Entities;
-
-namespace ShopOnline.Api.Data;
+﻿namespace ShopOnline.Api.Data;
 
 public class ShopOnlineDbContext : DbContext
 {
