@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using ShopOnline.App.Services.Contracts
+@inject IShoppingCartService ShoppingCartService
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ShopOnline.App</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -24,16 +28,37 @@
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
             </NavLink>
         </div>
+        <div class="nav-item px-3 d-sm-none">
+            <NavLink class="nav-link" href="ShoppingCart">
+                <span class="fas fa-shopping-cart" aria-hidden="true"></span> Shopping Cart (<b>@_shoppingCartItemsCount</b>)
+            </NavLink>
+        </div>
     </nav>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bool _collapseNavMenu = true;
+    private int _shoppingCartItemsCount = 0;
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
     }
+
+    protected override void OnInitialized()
+    {
+        ShoppingCartService.OnShoppingCartChanged += ShoppingCartChanged;
+    }
+    protected void ShoppingCartChanged(int totalQty)
+    {
+        _shoppingCartItemsCount = totalQty;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        ShoppingCartService.OnShoppingCartChanged -= ShoppingCartChanged;
+    }
+
 }
