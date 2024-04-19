@@ -10,6 +10,9 @@ public partial class ProductDetails : ComponentBase
     public int Id { get; set; }
 
     [Inject]
+    public IShoppingCartService ShoppingCartService { get; set; }
+
+    [Inject]
     public IProductService ProductService { get; set; }
 
     public ProductDto? Product { get; set; }
@@ -23,6 +26,19 @@ public partial class ProductDetails : ComponentBase
         catch (Exception e)
         {
             ErrorMessage = e.Message;
+        }
+    }
+
+    protected async Task AddToCart_Click(CartItemToAddDto cartItemToAddDto)
+    {
+        try
+        {
+            var cartItemDto = await ShoppingCartService.AddItem(cartItemToAddDto);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 }
