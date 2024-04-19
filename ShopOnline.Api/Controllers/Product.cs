@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShopOnline.Api.Extensions;
-using ShopOnline.Api.Repositories.Contracts;
-using ShopOnline.Models.Dtos;
-
-namespace ShopOnline.Api.Controllers;
+﻿namespace ShopOnline.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
