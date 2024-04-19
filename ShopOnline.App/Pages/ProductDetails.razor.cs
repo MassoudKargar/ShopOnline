@@ -15,6 +15,9 @@ public partial class ProductDetails : ComponentBase
     [Inject]
     public IProductService ProductService { get; set; }
 
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
     public ProductDto? Product { get; set; }
     public string? ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
@@ -34,6 +37,7 @@ public partial class ProductDetails : ComponentBase
         try
         {
             var cartItemDto = await ShoppingCartService.AddItem(cartItemToAddDto);
+            NavigationManager.NavigateTo("/ShoppingCart");
         }
         catch (Exception e)
         {
